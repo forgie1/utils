@@ -161,8 +161,12 @@ class Image
 		}
 
 		$method = 'imagecreatefrom' . self::FORMATS[$type];
-		return new static(Callback::invokeSafe($method, [$file], function (string $message): void {
-			throw new ImageException($message);
+		return new static(Callback::invokeSafe($method, [$file], function (string $message, int $severity): bool {
+			if (!$severity & (E_WARNING | E_NOTICE)) {
+				throw new ImageException($message);
+			} else {
+				return false;
+			}
 		}));
 	}
 
