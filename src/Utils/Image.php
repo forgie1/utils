@@ -161,7 +161,7 @@ class Image
 		}
 
 		$method = 'imagecreatefrom' . self::FORMATS[$type];
-		return new static(Callback::invokeSafe($method, [$file], function (string $message, int $severity): bool {
+		return new static(@Callback::invokeSafe($method, [$file], function (string $message, int $severity): bool {
 			if (!$severity & (E_WARNING | E_NOTICE)) {
 				throw new ImageException($message);
 			} else {
